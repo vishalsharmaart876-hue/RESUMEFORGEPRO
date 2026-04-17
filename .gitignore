@@ -1,0 +1,27 @@
+# Node modules
+node_modules/
+node_modules_copy/
+
+# VS Code files
+.vscode/
+.vscode.zip
+
+# Environment files
+.env
+.env_copy
+
+# Backup / copy files
+*_copy.*
+backup_*/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Zip files
+*.zip
+node_modules copy
+.env copy

@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Resume Forge Pro — Complete Suite</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+</head>
+
+<body>
+
+  <!-- ═══════ TOP NAV ═══════ -->
+  <div class="app-nav">
+    <div class="nav-logo">Resume<span>Forge</span> Pro</div>
+    <div class="nav-tabs">
+      <button class="nav-tab dashboard-tab" onclick="switchApp('dashboard')" id="tab-dashboard"><span
+          class="tab-icon">📊</span> Dashboard</button>
+      <button class="nav-tab active" onclick="switchApp('builder')" id="tab-builder">
+        <span class="tab-icon">📄</span> Resume Builder
+      </button>
+      <button class="nav-tab practice-tab" onclick="switchApp('practice')" id="tab-practice">
+        <span class="tab-icon">🎯</span> Practice Arena
+      </button>
+      <button class="nav-tab ats-tab" onclick="switchApp('ats')" id="tab-ats">
+        <span class="tab-icon">🔍</span> Resume ATS
+      </button>
+    </div>
+    <div class="nav-right">
+      <div class="nav-stat">
+        <div class="nav-stat-val" id="nav-streak">0🔥</div>
+        <div class="nav-stat-lbl">Streak</div>
+      </div>
+      <div class="nav-stat">
+        <div class="nav-stat-val" id="nav-xp">0</div>
+        <div class="nav-stat-lbl">XP</div>
+      </div>
+      <div class="nav-stat">
+        <div class="nav-stat-val" id="nav-sessions">0</div>
+        <div class="nav-stat-lbl">Sessions</div>
+      </div>
+      <div class="nav-user">
+        <div class="nav-avatar" id="nav-avatar">🧑‍💻</div>
+        <div class="nav-username" id="nav-username">User</div>
+        <button class="nav-logout" onclick="logout()">Log Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+     RESUME BUILDER PANEL
+═══════════════════════════════ -->
+  <!-- AUTH SCREEN -->
+  <div id="auth-screen"
+    style="position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;overflow-y:auto;padding:20px 0">
+    <div
+      style="position:absolute;width:500px;height:500px;background:var(--accent);border-radius:50%;filter:blur(90px);opacity:.12;top:-180px;left:-120px;pointer-events:none">
+    </div>
+    <div
+      style="position:absolute;width:400px;height:400px;background:var(--p);border-radius:50%;filter:blur(90px);opacity:.1;bottom:-100px;right:-80px;pointer-events:none">
+    </div>
+    <div style="position:relative;z-index:2;width:100%;max-width:430px;padding:0 16px">
+      <div style="text-align:center;margin-bottom:22px">
+        <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--accent2)">
+          Resume<span style="color:var(--gold)">Forge</span> Pro</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:4px;letter-spacing:1.5px;text-transform:uppercase">
+          Build · Practice · Get Hired</div>
+      </div>
+      <div
+        style="background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:28px;box-shadow:0 24px 64px rgba(0,0,0,.55)">
+        <div style="display:flex;background:var(--surface2);border-radius:10px;padding:4px;margin-bottom:20px;gap:4px">
+          <button id="atab-si" onclick="authTab('si')"
+            style="flex:1;padding:8px;border:none;background:var(--accent);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border-radius:7px;transition:all .2s">Sign
+            In</button>
+          <button id="atab-su" onclick="authTab('su')"
+            style="flex:1;padding:8px;border:none;background:none;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border-radius:7px;transition:all .2s">Sign
+            Up</button>
+        </div>
+        <!-- SIGN IN -->
+        <div id="af-si">
+          <div style="margin-bottom:12px"><label
+              style="display:block;font-size:10px;color:var(--text2);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Email</label><input
+              id="si-em" type="email" placeholder="you@example.com"
+              style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+            <div id="si-em-err" style="font-size:10px;color:var(--rose);margin-top:3px;display:none">Enter a valid email
+            </div>
+          </div>
+          <div style="margin-bottom:12px"><label
+              style="display:block;font-size:10px;color:var(--text2);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Password</label>
+            <div style="position:relative"><input id="si-pw" type="password" placeholder="Your password"
+                style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 38px 10px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"
+                onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"><button
+                onclick="tPW('si-pw',this)"
+                style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px">👁</button>
+            </div>
+            <div id="si-pw-err" style="font-size:10px;color:var(--rose);margin-top:3px;display:none">Incorrect password
+            </div>
+          </div>
+          <button onclick="doSignIn()"
+            style="width:100%;padding:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:var(--radius);color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px;letter-spacing:.3px">Sign
+            In →</button>
+          <div style="text-align:center;color:var(--text3);font-size:11px;margin:14px 0;position:relative"><span
+              style="background:var(--surface);padding:0 10px;position:relative;z-index:1">or</span>
+            <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border)"></div>
+          </div>
+          <button onclick="doDemo()"
+            style="width:100%;padding:9px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:7px;font-family:'DM Sans',sans-serif">🎭
+            &nbsp;Continue as Demo User</button>
+        </div>
+        <!-- SIGN UP -->
+        <div id="af-su" style="display:none">
+          <div style="margin-bottom:11px"><label
+              style="display:block;font-size:10px;color:var(--text2);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Your
+              Name</label><input id="su-nm" type="text" placeholder="Alex Johnson"
+              style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+            <div id="su-nm-err" style="font-size:10px;color:var(--rose);margin-top:3px;display:none">Name is required
+            </div>
+          </div>
+          <div style="margin-bottom:11px"><label
+              style="display:block;font-size:10px;color:var(--text2);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Email</label><input
+              id="su-em" type="email" placeholder="you@example.com"
+              style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+            <div id="su-em-err" style="font-size:10px;color:var(--rose);margin-top:3px;display:none">Enter a valid email
+            </div>
+          </div>
+          <div style="margin-bottom:11px"><label
+              style="display:block;font-size:10px;color:var(--text2);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Password</label>
+            <div style="position:relative"><input id="su-pw" type="password" placeholder="Min 6 characters"
+                oninput="pwStrength(this.value)"
+                style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 38px 10px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"
+                onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"><button
+                onclick="tPW('su-pw',this)"
+                style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px">👁</button>
+            </div>
+            <div id="pw-bar"
+              style="height:3px;border-radius:2px;margin-top:4px;background:var(--border);transition:all .3s"></div>
+            <div id="pw-lbl" style="font-size:9px;color:var(--text3);margin-top:2px"></div>
+            <div id="su-pw-err" style="font-size:10px;color:var(--rose);margin-top:3px;display:none">Password must be at
+              least 6 characters</div>
+          </div>
+          <div style="margin-bottom:11px"><label
+              style="display:block;font-size:10px;color:var(--text2);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Choose
+              Avatar</label>
+            <div style="display:flex;gap:7px;flex-wrap:wrap" id="av-row">
+              <div onclick="pickAv(this,'🧑‍💻')"
+                style="width:40px;height:40px;border-radius:50%;cursor:pointer;border:2px solid var(--accent);background:rgba(124,106,247,.15);display:flex;align-items:center;justify-content:center;font-size:19px;transition:all .2s">
+                🧑‍💻</div>
+              <div onclick="pickAv(this,'👩‍🎨')"
+                style="width:40px;height:40px;border-radius:50%;cursor:pointer;border:2px solid transparent;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:19px;transition:all .2s">
+                👩‍🎨</div>
+              <div onclick="pickAv(this,'🧑‍🔬')"
+                style="width:40px;height:40px;border-radius:50%;cursor:pointer;border:2px solid transparent;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:19px;transition:all .2s">
+                🧑‍🔬</div>
+              <div onclick="pickAv(this,'👩‍💼')"
+                style="width:40px;height:40px;border-radius:50%;cursor:pointer;border:2px solid transparent;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:19px;transition:all .2s">
+                👩‍💼</div>
+              <div onclick="pickAv(this,'🧑‍🎓')"
+                style="width:40px;height:40px;border-radius:50%;cursor:pointer;border:2px solid transparent;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:19px;transition:all .2s">
+                🧑‍🎓</div>
+              <div onclick="pickAv(this,'🦸')"
+                style="width:40px;height:40px;border-radius:50%;cursor:pointer;border:2px solid transparent;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:19px;transition:all .2s">
+                🦸</div>
+            </div>
+          </div>
+          <button onclick="doSignUp()"
+            style="width:100%;padding:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:var(--radius);color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px">Create
+            Account →</button>
+          <button onclick="doDemo()"
+            style="width:100%;padding:9px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:9px;font-family:'DM Sans',sans-serif">🎭
+            &nbsp;Continue as Demo User</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:14px">
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-size:18px;margin-bottom:4px">📄</div>
+          <div style="font-size:9px;color:var(--text2)">10 pro resume templates</div>
+        </div>
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-size:18px;margin-bottom:4px">🎯</div>
+          <div style="font-size:9px;color:var(--text2)">AI mock interviews</div>
+        </div>
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-size:18px;margin-bottom:4px">📊</div>
+          <div style="font-size:9px;color:var(--text2)">Track your performance</div>
+        </div>
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-size:18px;margin-bottom:4px">🏆</div>
+          <div style="font-size:9px;color:var(--text2)">Earn badges &amp; XP</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD PANEL -->
+  <div class="app-panel" id="panel-dashboard">
+    <div style="flex:1;overflow-y:auto;background:var(--bg);padding:24px">
+      <div
+        style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800">Welcome back, <span id="dash-name"
+              style="color:var(--p)">there</span> 👋</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px" id="dash-date"></div>
+        </div>
+        <button onclick="switchApp('practice')"
+          style="padding:9px 18px;background:var(--p);color:#07070f;border:none;border-radius:var(--radius);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer">Start
+          Practice →</button>
+      </div>
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);padding:14px;border-top:3px solid var(--accent)">
+          <div id="ds-xp"
+            style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--accent2);margin-bottom:2px">
+            0</div>
+          <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Total XP</div>
+        </div>
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);padding:14px;border-top:3px solid var(--gold)">
+          <div id="ds-streak"
+            style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--gold);margin-bottom:2px">0🔥
+          </div>
+          <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Day Streak</div>
+        </div>
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);padding:14px;border-top:3px solid var(--p)">
+          <div id="ds-sessions"
+            style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--p);margin-bottom:2px">0
+          </div>
+          <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Sessions Done</div>
+        </div>
+        <div
+          style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);padding:14px;border-top:3px solid var(--green)">
+          <div id="ds-avg"
+            style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--green);margin-bottom:2px">—
+          </div>
+          <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Avg Score</div>
+        </div>
+      </div>
+      <!-- Quick Start -->
+      <div
+        style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:9px">
+        Quick Start</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
+        <div onclick="switchApp('practice');setTimeout(()=>openPSetup('technical'),80)"
+          style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;cursor:pointer;text-align:center;transition:all .2s"
+          onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:18px">💻</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text);margin-top:4px">Technical</div>
+          <div style="font-size:8px;color:var(--text3)">DSA · System Design</div>
+        </div>
+        <div onclick="switchApp('practice');setTimeout(()=>openPSetup('hr'),80)"
+          style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;cursor:pointer;text-align:center;transition:all .2s"
+          onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:18px">🤝</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text);margin-top:4px">HR Round</div>
+          <div style="font-size:8px;color:var(--text3)">STAR · Behavioral</div>
+        </div>
+        <div onclick="switchApp('practice');setTimeout(()=>openPSetup('mock'),80)"
+          style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;cursor:pointer;text-align:center;transition:all .2s"
+          onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:18px">🎙️</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text);margin-top:4px">Mock Interview</div>
+          <div style="font-size:8px;color:var(--text3)">Live AI session</div>
+        </div>
+        <div onclick="switchApp('practice');setTimeout(()=>openPSetup('aptitude'),80)"
+          style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;cursor:pointer;text-align:center;transition:all .2s"
+          onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:18px">🧠</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text);margin-top:4px">Aptitude</div>
+          <div style="font-size:8px;color:var(--text3)">Quant · Logical</div>
+        </div>
+        <div onclick="switchApp('practice');setTimeout(()=>openPSetup('coding'),80)"
+          style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;cursor:pointer;text-align:center;transition:all .2s"
+          onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:18px">⌨️</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text);margin-top:4px">Coding</div>
+          <div style="font-size:8px;color:var(--text3)">Algorithms · DSA</div>
+        </div>
+        <div onclick="switchApp('builder')"
+          style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;cursor:pointer;text-align:center;transition:all .2s"
+          onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:18px">📄</div>
+          <div style="font-size:11px;font-weight:600;color:var(--text);margin-top:4px">Edit Resume</div>
+          <div style="font-size:8px;color:var(--text3)">10 templates</div>
+        </div>
+      </div>
+      <!-- Two column -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);padding:14px">
+          <div
+            style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:10px">
+            Performance by Category</div>
+          <div id="perf-by-cat">
+            <div style="text-align:center;padding:18px;color:var(--text3);font-size:11px">Complete sessions to see your
+              breakdown.</div>
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);padding:14px">
+          <div
+            style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:10px">
+            Recent Activity</div>
+          <div id="activity-feed">
+            <div style="text-align:center;padding:18px;color:var(--text3);font-size:11px">No activity yet. Start your
+              first session!</div>
+          </div>
+        </div>
+      </div>
+      <!-- Goals + Badges -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);padding:14px">
+          <div
+            style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:10px">
+            Weekly Goals</div>
+          <div id="goals-list">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px">
+              <div style="font-size:13px;width:22px">🎯</div>
+              <div style="flex:1">
+                <div style="font-size:10px;font-weight:600;color:var(--text);margin-bottom:3px">Complete 5 Sessions
+                </div>
+                <div style="height:4px;background:var(--surface3);border-radius:3px;overflow:hidden">
+                  <div id="g-ses"
+                    style="height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--p));width:0%;transition:width .6s">
+                  </div>
+                </div>
+                <div id="gm-ses" style="font-size:8px;color:var(--text3);margin-top:2px">0 / 5</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px">
+              <div style="font-size:13px;width:22px">⭐</div>
+              <div style="flex:1">
+                <div style="font-size:10px;font-weight:600;color:var(--text);margin-bottom:3px">Earn 500 XP</div>
+                <div style="height:4px;background:var(--surface3);border-radius:3px;overflow:hidden">
+                  <div id="g-xp"
+                    style="height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--p));width:0%;transition:width .6s">
+                  </div>
+                </div>
+                <div id="gm-xp" style="font-size:8px;color:var(--text3);margin-top:2px">0 / 500 XP</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px">
+              <div style="font-size:13px;width:22px">🏆</div>
+              <div style="flex:1">
+                <div style="font-size:10px;font-weight:600;color:var(--text);margin-bottom:3px">Score 80%+ once</div>
+                <div style="height:4px;background:var(--surface3);border-radius:3px;overflow:hidden">
+                  <div id="g-score"
+                    style="height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--p));width:0%;transition:width .6s">
+                  </div>
+                </div>
+                <div id="gm-score" style="font-size:8px;color:var(--text3);margin-top:2px">Best: —</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="font-size:13px;width:22px">🔥</div>
+              <div style="flex:1">
+                <div style="font-size:10px;font-weight:600;color:var(--text);margin-bottom:3px">3-day streak</div>
+                <div style="height:4px;background:var(--surface3);border-radius:3px;overflow:hidden">
+                  <div id="g-str"
+                    style="height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--p));width:0%;transition:width .6s">
+                  </div>
+                </div>
+                <div id="gm-str" style="font-size:8px;color:var(--text3);margin-top:2px">0 / 3 days</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);padding:14px">
+          <div
+            style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:10px">
+            Badges &amp; Achievements</div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px" id="badge-grid">
+            <div class="bdg locked">
+              <div style="font-size:18px;margin-bottom:3px">🚀</div>
+              <div style="font-size:8px;color:var(--text2);font-weight:600;margin-bottom:1px">First Launch</div>
+              <div style="font-size:7px;color:var(--text3)">Do 1 session</div>
+            </div>
+            <div class="bdg locked">
+              <div style="font-size:18px;margin-bottom:3px">🔥</div>
+              <div style="font-size:8px;color:var(--text2);font-weight:600;margin-bottom:1px">On Fire</div>
+              <div style="font-size:7px;color:var(--text3)">3-day streak</div>
+            </div>
+            <div class="bdg locked">
+              <div style="font-size:18px;margin-bottom:3px">💯</div>
+              <div style="font-size:8px;color:var(--text2);font-weight:600;margin-bottom:1px">Perfect</div>
+              <div style="font-size:7px;color:var(--text3)">Score 100%</div>
+            </div>
+            <div class="bdg locked">
+              <div style="font-size:18px;margin-bottom:3px">🧠</div>
+              <div style="font-size:8px;color:var(--text2);font-weight:600;margin-bottom:1px">Brain Box</div>
+              <div style="font-size:7px;color:var(--text3)">Aptitude done</div>
+            </div>
+            <div class="bdg locked">
+              <div style="font-size:18px;margin-bottom:3px">🎤</div>
+              <div style="font-size:8px;color:var(--text2);font-weight:600;margin-bottom:1px">Interviewer</div>
+              <div style="font-size:7px;color:var(--text3)">Mock done</div>
+            </div>
+            <div class="bdg locked">
+              <div style="font-size:18px;margin-bottom:3px">📚</div>
+              <div style="font-size:8px;color:var(--text2);font-weight:600;margin-bottom:1px">Scholar</div>
+              <div style="font-size:7px;color:var(--text3)">10 sessions</div>
+            </div>
+            <div class="bdg locked">
+              <div style="font-size:18px;margin-bottom:3px">🏆</div>
+              <div style="font-size:8px;color:var(--text2);font-weight:600;margin-bottom:1px">Champion</div>
+              <div style="font-size:7px;color:var(--text3)">1000 XP</div>
+            </div>
+            <div class="bdg locked">
+              <div style="font-size:18px;margin-bottom:3px">💎</div>
+              <div style="font-size:8px;color:var(--text2);font-weight:600;margin-bottom:1px">Diamond</div>
+              <div style="font-size:7px;color:var(--text3)">90%+ 5 times</div>
+            </div>
+            <div class="bdg locked">
+              <div style="font-size:18px;margin-bottom:3px">⚡</div>
+              <div style="font-size:8px;color:var(--text2);font-weight:600;margin-bottom:1px">Speed Demon</div>
+              <div style="font-size:7px;color:var(--text3)">Answer fast</div>
+            </div>
+            <div class="bdg locked">
+              <div style="font-size:18px;margin-bottom:3px">👑</div>
+              <div style="font-size:8px;color:var(--text2);font-weight:600;margin-bottom:1px">Legend</div>
+              <div style="font-size:7px;color:var(--text3)">Top board</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Heatmap -->
+      <div
+        style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);padding:14px;margin-bottom:20px">
+        <div
+          style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:10px">
+          Activity Heatmap — Last 12 Weeks</div>
+        <div style="display:flex;gap:3px;flex-wrap:wrap" id="heatmap"></div>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:6px;font-size:9px;color:var(--text3)">Less
+          <div style="width:11px;height:11px;border-radius:2px;background:var(--surface3)"></div>
+          <div style="width:11px;height:11px;border-radius:2px;background:rgba(124,106,247,.3)"></div>
+          <div style="width:11px;height:11px;border-radius:2px;background:rgba(124,106,247,.55)"></div>
+          <div style="width:11px;height:11px;border-radius:2px;background:rgba(124,106,247,.8)"></div>
+          <div style="width:11px;height:11px;border-radius:2px;background:var(--accent)"></div> More
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-panel active" id="panel-builder">
+    <div class="resume-panel">
+
+      <!-- LEFT SIDEBAR -->
+      <div class="sidebar">
+        <div class="sidebar-tabs">
+          <button class="stab active" onclick="switchTab('design')">Design</button>
+          <button class="stab" onclick="switchTab('content')">Content</button>
+          <button class="stab" onclick="switchTab('extras')">Extras</button>
+          <button class="stab" onclick="switchTab('settings')">Settings</button>
+        </div>
+        <div class="sidebar-content" id="sidebar-content"></div>
+      </div>
+
+      <!-- CENTER PREVIEW -->
+      <div class="main-area">
+        <div class="topbar">
+          <div class="topbar-left">
+            <div class="zoom-ctrl">
+              <button class="zoom-btn" onclick="changeZoom(-10)">−</button>
+              <div class="zoom-val" id="zoom-val">85%</div>
+              <button class="zoom-btn" onclick="changeZoom(10)">+</button>
+            </div>
+            <div style="width:1px;height:20px;background:var(--border)"></div>
+            <div style="display:flex;gap:4px">
+              <button class="btn btn-sm btn-secondary" onclick="switchDocPage('resume')">Resume</button>
+              <button class="btn btn-sm btn-ghost" onclick="switchDocPage('cover')">Cover Letter</button>
+              <button class="btn btn-sm btn-ghost" onclick="switchDocPage('linkedin')">LinkedIn</button>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="font-size:10px;color:var(--green);display:flex;align-items:center;gap:4px">
+              <div style="width:6px;height:6px;border-radius:50%;background:var(--green)"></div>Auto-saved
+            </div>
+            <button class="btn btn-sm btn-primary"
+              onclick="document.getElementById('export-modal').classList.add('open')">Export ↓</button>
+          </div>
+        </div>
+        <div class="preview-wrap">
+          <div id="resume-paper" class="resume-paper" style="width:794px;min-height:1120px;transform:scale(0.85)">
+            <div id="resume-render"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT AI CHAT -->
+      <div class="ai-chat">
+        <div class="chat-header">
+          <div class="chat-dot"></div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text)">AI Writing Assistant</div>
+            <div style="font-size:9px;color:var(--text3)">Powered by Groq</div>
+          </div>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+          <div class="rmsg rmsg-ai">👋 Hi! I'm your AI resume coach. Ask me anything to get started!</div>
+          <div class="rmsg rmsg-ai">💡 Tip: Switch to <strong>Practice Arena</strong> (top nav) to prep for interviews
+            after building your resume!</div>
+        </div>
+        <div class="chat-input-area">
+          <div class="chat-input-row">
+            <input class="chat-input" id="chat-input" placeholder="Ask AI anything..."
+              onkeydown="if(event.key==='Enter')sendResumeChat()">
+            <button class="chat-send" onclick="sendResumeChat()">↑</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export Modal -->
+  <div class="modal-overlay" id="export-modal" onclick="if(event.target===this)this.classList.remove('open')">
+    <div class="modal">
+      <button class="modal-close" onclick="document.getElementById('export-modal').classList.remove('open')">×</button>
+      <h3>Export Resume</h3>
+      <div class="export-grid">
+        <div class="export-card" onclick="exportResume('pdf')">
+          <div class="export-icon">📄</div>
+          <div class="export-name">PDF</div>
+          <div class="export-desc">Best for applications</div>
+        </div>
+        <div class="export-card" onclick="exportResume('docx')">
+          <div class="export-icon">📝</div>
+          <div class="export-name">DOCX</div>
+          <div class="export-desc">Editable Word file</div>
+        </div>
+        <div class="export-card" onclick="exportResume('image')">
+          <div class="export-icon">🖼️</div>
+          <div class="export-name">PNG/JPG</div>
+          <div class="export-desc">Social sharing</div>
+        </div>
+        <div class="export-card" onclick="exportResume('text')">
+          <div class="export-icon">📋</div>
+          <div class="export-name">Plain Text</div>
+          <div class="export-desc">ATS-safe format</div>
+        </div>
+        <div class="export-card" onclick="exportResume('html')">
+          <div class="export-icon">🌐</div>
+          <div class="export-name">HTML</div>
+          <div class="export-desc">Online portfolio</div>
+        </div>
+        <div class="export-card" onclick="exportResume('json')">
+          <div class="export-icon">📊</div>
+          <div class="export-name">JSON</div>
+          <div class="export-desc">Data backup</div>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+        <div class="toggle">
+          <div class="toggle-label">Include cover letter</div>
+          <div class="toggle-switch" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="toggle">
+          <div class="toggle-label">Compress file size</div>
+          <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+     PRACTICE ARENA PANEL
+═══════════════════════════════ -->
+  <div class="app-panel" id="panel-practice">
+    <div class="practice-panel-wrap">
+
+      <!-- HOME -->
+      <div class="ppage active" id="ppage-home">
+        <div class="phero">
+          <div class="hero-tag"><span class="htdot"></span> Interview Practice Arena</div>
+          <h1>Land Your <em>Dream</em> Placement</h1>
+          <p>AI-powered mock interviews, aptitude drills, coding challenges, and real-time feedback — built right inside
+            Resume Forge.</p>
+        </div>
+        <div class="mode-grid">
+          <div class="mode-card c-cyan" onclick="openPSetup('technical')">
+            <div class="mode-icon">💻</div>
+            <div class="mode-title">Technical Round</div>
+            <div class="mode-desc">DSA, system design, OOP, databases, OS, networking — the full CS core.</div>
+            <div class="mode-meta"><span class="mode-tag">DSA</span><span class="mode-tag">System Design</span><span
+                class="mode-tag">DBMS</span></div>
+          </div>
+          <div class="mode-card c-rose" onclick="openPSetup('hr')">
+            <div class="mode-icon">🤝</div>
+            <div class="mode-title">HR Round</div>
+            <div class="mode-desc">Behavioral, situational, values alignment, and STAR method storytelling.</div>
+            <div class="mode-meta"><span class="mode-tag">STAR Method</span><span class="mode-tag">Culture Fit</span>
+            </div>
+          </div>
+          <div class="mode-card c-amber" onclick="openPSetup('aptitude')">
+            <div class="mode-icon">🧠</div>
+            <div class="mode-title">Aptitude Test</div>
+            <div class="mode-desc">Quant, logical reasoning, verbal — timed MCQ format like real campus tests.</div>
+            <div class="mode-meta"><span class="mode-tag">Quant</span><span class="mode-tag">Logical</span><span
+                class="mode-tag">Verbal</span></div>
+          </div>
+          <div class="mode-card c-violet" onclick="openPSetup('mock')">
+            <div class="mode-icon">🎙️</div>
+            <div class="mode-title">Mock Interview</div>
+            <div class="mode-desc">Simulated live interview with an AI interviewer. Real-time conversation and scoring.
+            </div>
+            <div class="mode-meta"><span class="mode-tag">Live Feedback</span><span class="mode-tag">AI Coach</span>
+            </div>
+          </div>
+          <div class="mode-card c-green" onclick="openPSetup('coding')">
+            <div class="mode-icon">⌨️</div>
+            <div class="mode-title">Coding Challenge</div>
+            <div class="mode-desc">Explain your approach to algorithmic problems and get complexity feedback.</div>
+            <div class="mode-meta"><span class="mode-tag">Arrays</span><span class="mode-tag">DP</span><span
+                class="mode-tag">Graphs</span></div>
+          </div>
+          <div class="mode-card c-cyan" onclick="openPSetup('group')">
+            <div class="mode-icon">👥</div>
+            <div class="mode-title">Group Discussion</div>
+            <div class="mode-desc">Practice GD topics — take a stance, structure arguments, handle counterpoints.</div>
+            <div class="mode-meta"><span class="mode-tag">Arguments</span><span class="mode-tag">Leadership</span></div>
+          </div>
+        </div>
+        <div class="plb">
+          <div class="psec-title">Top Performers This Week</div>
+          <div class="lb-row">
+            <div class="lb-rank gold">1</div>
+            <div class="lb-name">Priya S. <span style="font-size:10px;color:var(--txt3)">· Full Stack</span></div>
+            <div class="lb-score">2,840 XP</div>
+          </div>
+          <div class="lb-row">
+            <div class="lb-rank silver">2</div>
+            <div class="lb-name">Arjun M. <span style="font-size:10px;color:var(--txt3)">· Data Science</span></div>
+            <div class="lb-score">2,610 XP</div>
+          </div>
+          <div class="lb-row">
+            <div class="lb-rank bronze">3</div>
+            <div class="lb-name">Sneha R. <span style="font-size:10px;color:var(--txt3)">· Backend</span></div>
+            <div class="lb-score">2,490 XP</div>
+          </div>
+          <div class="lb-row">
+            <div class="lb-rank">4</div>
+            <div class="lb-name">You <span style="font-size:10px;color:var(--txt3)">· Not ranked yet</span></div>
+            <div class="lb-score" style="color:var(--txt3)">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETUP -->
+      <div class="ppage" id="ppage-setup">
+        <div class="setup-wrap">
+          <button class="pback-btn" onclick="showPPage('home')">← Back</button>
+          <div class="setup-title" id="psetup-title">Configure Session</div>
+          <div class="setup-sub" id="psetup-sub">Customise your practice session</div>
+          <div class="setup-section" id="ptopic-section">
+            <div class="setup-label">Focus Topic</div>
+            <div class="pill-row" id="ptopic-pills"></div>
+          </div>
+          <div class="setup-section" id="pcompany-section">
+            <div class="setup-label">Target Company Style</div>
+            <div class="pill-row">
+              <div class="ppill sel" onclick="togglePPill(this,'pcompany')">Any</div>
+              <div class="ppill" onclick="togglePPill(this,'pcompany')">TCS / Infosys</div>
+              <div class="ppill" onclick="togglePPill(this,'pcompany')">Wipro / HCL</div>
+              <div class="ppill" onclick="togglePPill(this,'pcompany')">Amazon / Flipkart</div>
+              <div class="ppill" onclick="togglePPill(this,'pcompany')">Google / Meta</div>
+              <div class="ppill" onclick="togglePPill(this,'pcompany')">Startup</div>
+            </div>
+          </div>
+          <div class="setup-section">
+            <div class="setup-label">Difficulty</div>
+            <div class="diff-row">
+              <div class="diff-card" onclick="selectPDiff(this,'easy')">
+                <div class="diff-emoji">🌱</div>
+                <div class="diff-name">Easy</div>
+                <div class="diff-desc">Freshers</div>
+              </div>
+              <div class="diff-card sel" onclick="selectPDiff(this,'medium')">
+                <div class="diff-emoji">⚡</div>
+                <div class="diff-name">Medium</div>
+                <div class="diff-desc">1–2 Yrs Exp</div>
+              </div>
+              <div class="diff-card" onclick="selectPDiff(this,'hard')">
+                <div class="diff-emoji">🔥</div>
+                <div class="diff-name">Hard</div>
+                <div class="diff-desc">FAANG Level</div>
+              </div>
+            </div>
+          </div>
+          <div class="setup-section">
+            <div class="setup-label">Number of Questions</div>
+            <div class="pill-row">
+              <div class="ppill" onclick="togglePPill(this,'pqcount')">5</div>
+              <div class="ppill sel" onclick="togglePPill(this,'pqcount')">10</div>
+              <div class="ppill" onclick="togglePPill(this,'pqcount')">15</div>
+              <div class="ppill" onclick="togglePPill(this,'pqcount')">20</div>
+            </div>
+          </div>
+          <div class="setup-section" id="ptime-section">
+            <div class="setup-label">Time per Question</div>
+            <div class="pill-row">
+              <div class="ppill" onclick="togglePPill(this,'ptimer')">No timer</div>
+              <div class="ppill sel" onclick="togglePPill(this,'ptimer')">60s</div>
+              <div class="ppill" onclick="togglePPill(this,'ptimer')">90s</div>
+              <div class="ppill" onclick="togglePPill(this,'ptimer')">120s</div>
+            </div>
+          </div>
+          <button class="pstart-btn" onclick="startPSession()">Start Session →</button>
+        </div>
+      </div>
+
+      <!-- SESSION -->
+      <div class="ppage" id="ppage-session">
+        <div class="session-wrap">
+          <button class="pback-btn" onclick="clearInterval(pSession.timerInterval);showPPage('home')">← Home</button>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="pprogress-fill" style="width:0%"></div>
+          </div>
+          <div class="q-meta">
+            <div class="q-num" id="pq-num">Question 1 of 10</div>
+            <div id="pq-type-badge" class="q-type-badge badge-tech">Technical</div>
+          </div>
+          <div class="timer-row" id="ptimer-row">
+            <div class="timer-display" id="ptimer-display">60</div>
+            <div class="timer-bar">
+              <div class="timer-bar-fill" id="ptimer-fill" style="width:100%;background:var(--p)"></div>
+            </div>
+          </div>
+          <div class="q-card">
+            <div class="q-text" id="pq-text">Loading...</div>
+            <div class="q-hint-text" id="pq-hint"></div>
+            <div class="q-code" id="pq-code" style="display:none"></div>
+          </div>
+          <div class="hint-box" id="phint-box"></div>
+          <div class="mcq-options" id="pmcq-options" style="display:none"></div>
+          <textarea class="answer-area" id="panswer-area"
+            placeholder="Type your answer here... Be detailed. Use examples from your experience."></textarea>
+          <div class="action-row">
+            <button class="pbtn-submit" id="pbtn-submit" onclick="submitPAnswer()">Submit Answer →</button>
+            <button class="pbtn-hint" onclick="showPHint()">💡 Hint</button>
+            <button class="pbtn-skip" onclick="skipPQuestion()">Skip</button>
+          </div>
+          <div class="feedback-card" id="pfeedback-card">
+            <div class="fb-score-row">
+              <div class="fb-score" id="pfb-score"></div>
+              <div>
+                <div class="fb-stars" id="pfb-stars"></div>
+                <div class="fb-label" id="pfb-label"></div>
+              </div>
+            </div>
+            <div class="fb-body" id="pfb-body"></div>
+            <div class="fb-ideal" id="pfb-ideal"></div>
+            <div style="margin-top:12px"><button class="pbtn-submit" onclick="nextPQuestion()"
+                style="max-width:180px">Next Question →</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOCK INTERVIEW -->
+      <div class="ppage" id="ppage-mock">
+        <div class="mock-wrap">
+          <button class="pback-btn" onclick="showPPage('home')">← Home</button>
+          <div class="mock-header">
+            <div class="interviewer-avatar">🤖</div>
+            <div class="interviewer-info">
+              <div class="iname" id="pinterviewer-name">Alex Chen</div>
+              <div class="irole" id="pinterviewer-role">Senior Engineer · Google</div>
+            </div>
+            <div class="live-badge">
+              <div class="live-dot"></div>LIVE
+            </div>
+          </div>
+          <div class="chat-window" id="pmock-chat-window"></div>
+          <div class="mock-input-row">
+            <input class="mock-input" id="pmock-input" placeholder="Type your response... (Enter to send)"
+              onkeydown="if(event.key==='Enter')sendPMockMessage()">
+            <button class="mock-send" onclick="sendPMockMessage()">↑</button>
+          </div>
+          <div class="evaluation-panel">
+            <div class="eval-title">Live Evaluation</div>
+            <div class="eval-bar-row">
+              <div class="eval-bar-label">Communication</div>
+              <div class="eval-bar-track">
+                <div class="eval-bar-fill" style="width:0%;background:var(--p)" id="peval-comm"></div>
+              </div>
+              <div class="eval-bar-val" id="peval-comm-v">—</div>
+            </div>
+            <div class="eval-bar-row">
+              <div class="eval-bar-label">Depth</div>
+              <div class="eval-bar-track">
+                <div class="eval-bar-fill" style="width:0%;background:var(--violet)" id="peval-depth"></div>
+              </div>
+              <div class="eval-bar-val" id="peval-depth-v">—</div>
+            </div>
+            <div class="eval-bar-row">
+              <div class="eval-bar-label">Confidence</div>
+              <div class="eval-bar-track">
+                <div class="eval-bar-fill" style="width:0%;background:var(--g)" id="peval-conf"></div>
+              </div>
+              <div class="eval-bar-val" id="peval-conf-v">—</div>
+            </div>
+            <div class="eval-bar-row">
+              <div class="eval-bar-label">Structure</div>
+              <div class="eval-bar-track">
+                <div class="eval-bar-fill" style="width:0%;background:var(--amber)" id="peval-struct"></div>
+              </div>
+              <div class="eval-bar-val" id="peval-struct-v">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="ppage" id="ppage-results">
+        <div class="results-wrap">
+          <div class="results-hero">
+            <div class="result-score-ring">
+              <svg viewBox="0 0 36 36">
+                <circle cx="18" cy="18" r="15" fill="none" stroke="#1e1e35" stroke-width="3" />
+                <circle cx="18" cy="18" r="15" fill="none" stroke="url(#prg)" stroke-width="3" stroke-dasharray="0 100"
+                  stroke-linecap="round" id="presult-circle"
+                  style="transform:rotate(-90deg);transform-origin:18px 18px;transition:stroke-dasharray 1.2s" />
+                <defs>
+                  <linearGradient id="prg" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#6ee7f7" />
+                    <stop offset="100%" stop-color="#a78bfa" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="result-score-num">
+                <div class="rbig" id="presult-pct">0%</div>
+                <div class="rsmall">SCORE</div>
+              </div>
+            </div>
+            <div class="result-grade" id="presult-grade">—</div>
+            <div class="result-msg" id="presult-msg"></div>
+          </div>
+          <div class="result-grid">
+            <div class="result-stat">
+              <div class="result-stat-val" id="prs-correct" style="color:var(--g)">0</div>
+              <div class="result-stat-lbl">Correct</div>
+            </div>
+            <div class="result-stat">
+              <div class="result-stat-val" id="prs-wrong" style="color:var(--rose)">0</div>
+              <div class="result-stat-lbl">Wrong</div>
+            </div>
+            <div class="result-stat">
+              <div class="result-stat-val" id="prs-xp" style="color:var(--amber)">0</div>
+              <div class="result-stat-lbl">XP Earned</div>
+            </div>
+          </div>
+          <div
+            style="margin-bottom:10px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--txt3)">
+            Question Breakdown</div>
+          <div class="breakdown-list" id="pbreakdown-list"></div>
+          <div class="results-actions">
+            <button class="pbtn-retry" onclick="retryPSession()">Practice Again ↻</button>
+            <button class="pbtn-home" onclick="showPPage('home');switchApp('dashboard')">View Dashboard</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+  <!-- RESUME ATS PANEL -->
+  <div class="app-panel" id="panel-ats">
+    <div class="ats-container">
+      <div class="ats-hero">
+        <div class="hero-tag"><span class="htdot"></span> AI Resume Scanner</div>
+        <h1>Boost Your <em>ATS</em> Score</h1>
+        <p>Upload your resume and compare it with a job description to get an instant AI-powered compatibility score and
+          optimization tips.</p>
+
+        <!-- SERVER STATUS BADGE -->
+        <div id="server-status-badge" class="server-status-badge offline" onclick="showServerSetup()">
+          <span class="status-dot"></span>
+          <span class="status-text">Server: Offline (Click to fix)</span>
+        </div>
+      </div>
+
+      <div class="ats-main-grid">
+        <!-- Input Section -->
+        <div class="ats-input-section">
+          <div class="ats-card">
+            <h3>1. Upload Resume</h3>
+            <div class="ats-dropzone" id="ats-dropzone" onclick="document.getElementById('ats-file-input').click()">
+              <input type="file" id="ats-file-input" accept=".pdf" style="display:none"
+                onchange="handleAtsFileUpload(this)">
+              <div class="dz-icon">📄</div>
+              <div class="dz-text">Drag & drop your resume (PDF) or <span>click to browse</span></div>
+              <div class="dz-info" id="ats-filename">No file selected</div>
+            </div>
+          </div>
+
+          <div class="ats-card">
+            <h3>2. Job Description (Optional)</h3>
+            <textarea id="ats-jd-input" class="ats-textarea"
+              placeholder="Paste the job description here to check for keyword matching..."></textarea>
+          </div>
+
+          <button class="ats-analyze-btn" id="ats-analyze-btn" onclick="analyzeResumeATS()">
+            <span class="btn-text">Analyze Resume Now</span>
+            <div id="ats-loader" class="btn-loader" style="display:none"></div>
+          </button>
+        </div>
+
+        <!-- Results Section (Initially Hidden) -->
+        <div class="ats-results-section" id="ats-results" style="display:none">
+          <div class="ats-score-card">
+            <div class="ats-score-ring">
+              <svg viewBox="0 0 36 36">
+                <circle cx="18" cy="18" r="15" fill="none" stroke="var(--border)" stroke-width="3" />
+                <circle cx="18" cy="18" r="15" fill="none" stroke="var(--accent)" stroke-width="3"
+                  stroke-dasharray="0 100" stroke-linecap="round" id="ats-score-circle"
+                  style="transform:rotate(-90deg);transform-origin:18px 18px;transition:stroke-dasharray 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)" />
+              </svg>
+              <div class="ats-score-num">
+                <div class="ats-val" id="ats-score-val">0%</div>
+                <div class="ats-lbl">SCORE</div>
+              </div>
+            </div>
+            <div class="ats-score-feedback" id="ats-feedback-text">Scanning performance...</div>
+          </div>
+
+          <div class="ats-details-grid">
+            <div class="ats-detail-card">
+              <h4>✅ Strengths</h4>
+              <ul class="ats-list list-strengths" id="ats-strengths"></ul>
+            </div>
+            <div class="ats-detail-card">
+              <h4>🚀 Improvement Tips</h4>
+              <ul class="ats-list list-tips" id="ats-tips"></ul>
+            </div>
+            <div class="ats-detail-card">
+              <h4>🔑 Keywords Found</h4>
+              <div class="ats-tags" id="ats-matched-keywords"></div>
+            </div>
+            <div class="ats-detail-card">
+              <h4>❌ Missing Keywords</h4>
+              <div class="ats-tags tags-missing" id="ats-missing-keywords"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="script.js"></script>
+</body>
+
+</html>
