@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const multer = require('multer');
 const pdfParse = require('pdf-parse');
 const cors = require('cors');
@@ -21,6 +22,9 @@ const port = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Serve static files (CSS, JS, etc.)
+app.use(express.static(path.join(__dirname, '.')));
 
 // Database Connection (OPTIONAL now, won't crash the server if missing)
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/resumeforge', {
@@ -56,6 +60,10 @@ const auth = async (req, res, next) => {
 // --- ROUTES ---
 
 app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/api/status', (req, res) => {
   res.json({ status: 'online', engine: 'Resume Forge AI SDK v1.2' });
 });
 
