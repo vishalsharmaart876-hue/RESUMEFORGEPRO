@@ -746,7 +746,9 @@ renderResume();
 //  SERVER CONNECTION & ATS AI
 // ═══════════════════════════════════════════
 let isServerOnline = false;
-let serverUrl = 'http://localhost:5000';
+let serverUrl = window.location.hostname.includes('vercel.app') 
+  ? window.location.origin 
+  : 'http://localhost:5000';
 
 async function checkServerStatus() {
   const badge = document.getElementById('server-status-badge');
