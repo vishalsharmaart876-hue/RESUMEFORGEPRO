@@ -23,8 +23,8 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files (CSS, JS, etc.)
-app.use(express.static(path.join(__dirname, '.')));
+// Serve static files (CSS, JS, etc.) from the public folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Database Connection (OPTIONAL now, won't crash the server if missing)
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/resumeforge', {
@@ -60,7 +60,7 @@ const auth = async (req, res, next) => {
 // --- ROUTES ---
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.get('/api/status', (req, res) => {
