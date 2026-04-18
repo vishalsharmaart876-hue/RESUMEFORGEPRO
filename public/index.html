@@ -22,9 +22,7 @@
       <button class="nav-tab practice-tab" onclick="switchApp('practice')" id="tab-practice">
         <span class="tab-icon">🎯</span> Practice Arena
       </button>
-      <button class="nav-tab ats-tab" onclick="switchApp('ats')" id="tab-ats">
-        <span class="tab-icon">🔍</span> Resume ATS
-      </button>
+
     </div>
     <div class="nav-right">
       <div class="nav-stat">
@@ -868,88 +866,7 @@
 
 
 
-  <!-- RESUME ATS PANEL -->
-  <div class="app-panel" id="panel-ats">
-    <div class="ats-container">
-      <div class="ats-hero">
-        <div class="hero-tag"><span class="htdot"></span> AI Resume Scanner</div>
-        <h1>Boost Your <em>ATS</em> Score</h1>
-        <p>Upload your resume and compare it with a job description to get an instant AI-powered compatibility score and
-          optimization tips.</p>
 
-        <!-- SERVER STATUS BADGE -->
-        <div id="server-status-badge" class="server-status-badge offline" onclick="showServerSetup()">
-          <span class="status-dot"></span>
-          <span class="status-text">Server: Offline (Click to fix)</span>
-        </div>
-      </div>
-
-      <div class="ats-main-grid">
-        <!-- Input Section -->
-        <div class="ats-input-section">
-          <div class="ats-card">
-            <h3>1. Upload Resume</h3>
-            <div class="ats-dropzone" id="ats-dropzone" onclick="document.getElementById('ats-file-input').click()">
-              <input type="file" id="ats-file-input" accept=".pdf" style="display:none"
-                onchange="handleAtsFileUpload(this)">
-              <div class="dz-icon">📄</div>
-              <div class="dz-text">Drag & drop your resume (PDF) or <span>click to browse</span></div>
-              <div class="dz-info" id="ats-filename">No file selected</div>
-            </div>
-          </div>
-
-          <div class="ats-card">
-            <h3>2. Job Description (Optional)</h3>
-            <textarea id="ats-jd-input" class="ats-textarea"
-              placeholder="Paste the job description here to check for keyword matching..."></textarea>
-          </div>
-
-          <button class="ats-analyze-btn" id="ats-analyze-btn" onclick="analyzeResumeATS()">
-            <span class="btn-text">Analyze Resume Now</span>
-            <div id="ats-loader" class="btn-loader" style="display:none"></div>
-          </button>
-        </div>
-
-        <!-- Results Section (Initially Hidden) -->
-        <div class="ats-results-section" id="ats-results" style="display:none">
-          <div class="ats-score-card">
-            <div class="ats-score-ring">
-              <svg viewBox="0 0 36 36">
-                <circle cx="18" cy="18" r="15" fill="none" stroke="var(--border)" stroke-width="3" />
-                <circle cx="18" cy="18" r="15" fill="none" stroke="var(--accent)" stroke-width="3"
-                  stroke-dasharray="0 100" stroke-linecap="round" id="ats-score-circle"
-                  style="transform:rotate(-90deg);transform-origin:18px 18px;transition:stroke-dasharray 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)" />
-              </svg>
-              <div class="ats-score-num">
-                <div class="ats-val" id="ats-score-val">0%</div>
-                <div class="ats-lbl">SCORE</div>
-              </div>
-            </div>
-            <div class="ats-score-feedback" id="ats-feedback-text">Scanning performance...</div>
-          </div>
-
-          <div class="ats-details-grid">
-            <div class="ats-detail-card">
-              <h4>✅ Strengths</h4>
-              <ul class="ats-list list-strengths" id="ats-strengths"></ul>
-            </div>
-            <div class="ats-detail-card">
-              <h4>🚀 Improvement Tips</h4>
-              <ul class="ats-list list-tips" id="ats-tips"></ul>
-            </div>
-            <div class="ats-detail-card">
-              <h4>🔑 Keywords Found</h4>
-              <div class="ats-tags" id="ats-matched-keywords"></div>
-            </div>
-            <div class="ats-detail-card">
-              <h4>❌ Missing Keywords</h4>
-              <div class="ats-tags tags-missing" id="ats-missing-keywords"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
 
   <script src="script.js"></script>

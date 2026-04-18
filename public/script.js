@@ -45,7 +45,6 @@ var templates=[
   {id:'bold-left',name:'Bold Column',color:'#0f172a',accent:'#38bdf8'},
   {id:'timeline',name:'Timeline',color:'#f8fafc',accent:'#6366f1'},
   {id:'glassmorphism',name:'Glass',color:'#0f0f1a',accent:'#a78bfa'},
-  {id:'ats-safe',name:'ATS Safe',color:'#ffffff',accent:'#1e40af',badge:'ATS'},
   {id:'creative',name:'Creative',color:'#fffbf7',accent:'#f97316'},
   {id:'two-column',name:'Two Column',color:'#f1f5f9',accent:'#0891b2'}
 ];
@@ -90,7 +89,7 @@ function renderDesignTab(){
       <option value="Georgia">Georgia</option>
       <option value="Merriweather">Merriweather</option>
       <option value="DM Sans">DM Sans</option>
-      <option value="Arial">Arial (ATS)</option>
+      <option value="Arial">Arial</option>
     </select></div>
     <div class="sec-label">Spacing</div>
     <div class="field-group"><select class="field-input" onchange="rState.density=this.value;renderResume()">
@@ -547,13 +546,12 @@ function buildResume(){
   if(t==='elegant') return rElegant();
   if(t==='glassmorphism') return rGlass();
   if(t==='creative') return rCreative();
-  return rATS();
+  return rModernSplit();
 }
 var rs=`font-family: DM Sans, sans-serif; font-size: 12px; line-height: 1.5; color: #1a1a2e;`;
 function rSH(title,accent){return `<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#fff;background:${accent};padding:4px 10px;border-radius:3px;margin-bottom:10px;display:inline-block">${title}</div>`;}
 function rSL(title,accent){return `<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:${accent};border-bottom:2px solid ${accent};padding-bottom:4px;margin-bottom:10px">${title}</div>`;}
 function rModernSplit(){var dark=rState.template==='bold-left'?'#0f172a':'#1a1a2e';var lw=rState.template==='bold-left'?'38%':'35%';return `<div style="display:flex;min-height:1120px;${rs}"><div style="width:${lw};background:${dark};color:#e8e8f0;padding:28px 20px;box-sizing:border-box">${rState.showPhoto&&rState.photoUrl?`<div style="text-align:center;margin-bottom:16px"><img src="${rState.photoUrl}" style="width:76px;height:76px;border-radius:50%;object-fit:cover;border:3px solid ${rState.accent}"></div>`:''}<div style="font-family:${rState.font},serif;font-size:21px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:3px">${rState.name}</div><div style="font-size:11px;color:${rState.accent};font-weight:600;margin-bottom:18px">${rState.title}</div>${[rState.email,rState.phone,rState.location,rState.linkedin,rState.website,rState.github].filter(Boolean).map(v=>`<div style="font-size:10px;color:#9898b8;margin-bottom:5px">${v}</div>`).join('')}${rState.sections.skills&&rState.skills.length?`<div style="margin-top:14px">${rSH('Skills',rState.accent)}<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:5px">${rState.skills.map(s=>`<span style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:2px 7px;font-size:10px;color:#c8c8e0">${s}</span>`).join('')}</div></div>`:''}${rState.sections.languages&&rState.languages.length?`<div style="margin-top:14px">${rSH('Languages',rState.accent)}${rState.languages.map(l=>`<div style="display:flex;justify-content:space-between;font-size:10px;color:#c8c8e0;padding:2px 0"><span>${l.lang}</span><span style="color:${rState.accent}">${l.level}</span></div>`).join('')}</div>`:''}${rState.sections.certifications&&rState.certifications.length?`<div style="margin-top:14px">${rSH('Certifications',rState.accent)}${rState.certifications.map(c=>`<div style="font-size:10px;color:#c8c8e0;margin-bottom:4px"><div style="font-weight:600">${c.name}</div><div style="color:#6868a0">${c.issuer} · ${c.year}</div></div>`).join('')}</div>`:''}</div><div style="flex:1;padding:28px;box-sizing:border-box;background:#fff"><div style="font-size:11px;color:#666;line-height:1.6;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #e5e7eb">${rState.summary}</div>${rState.sections.experience&&rState.experiences.length?`<div style="margin-bottom:16px">${rSL('Experience',rState.accent)}${rState.experiences.map(e=>`<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between"><div style="font-weight:700;font-size:13px">${e.role}</div><div style="font-size:10px;color:#888">${e.from}–${e.to}</div></div><div style="font-size:11px;color:${rState.accent};font-weight:600;margin-bottom:4px">${e.company}</div><ul style="margin:0;padding-left:14px">${e.bullets.map(b=>`<li style="font-size:11px;color:#444;margin-bottom:2px">${b}</li>`).join('')}</ul></div>`).join('')}</div>`:''} ${rState.sections.education&&rState.education.length?`<div style="margin-bottom:16px">${rSL('Education',rState.accent)}${rState.education.map(e=>`<div style="margin-bottom:6px"><div style="font-weight:700;font-size:12px">${e.school}</div><div style="font-size:11px;color:#666">${e.degree} · ${e.year}${e.gpa?' · GPA: '+e.gpa:''}</div></div>`).join('')}</div>`:''} ${rState.sections.projects&&rState.projects.length?`<div style="margin-bottom:16px">${rSL('Projects',rState.accent)}${rState.projects.map(p=>`<div style="margin-bottom:6px"><div style="font-weight:700;font-size:12px">${p.name}${p.url?` <span style="font-size:10px;color:${rState.accent}">↗ ${p.url}</span>`:''}</div><div style="font-size:11px;color:#444">${p.desc}</div></div>`).join('')}</div>`:''}</div></div>`;}
-function rATS(){return `<div style="${rs}padding:34px 44px;background:#fff"><div style="text-align:center;margin-bottom:18px;border-bottom:2px solid ${rState.accent};padding-bottom:14px"><div style="font-family:Arial,sans-serif;font-size:27px;font-weight:700;color:#1a1a2e">${rState.name}</div><div style="font-size:13px;color:${rState.accent};margin:4px 0">${rState.title}</div><div style="font-size:11px;color:#555">${rState.email} | ${rState.phone} | ${rState.location}</div></div>${rState.sections.experience&&rState.experiences.length?`<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #ccc;padding-bottom:3px;margin-bottom:8px">Professional Experience</div>${rState.experiences.map(e=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between"><span style="font-weight:700">${e.role}, ${e.company}</span><span style="font-size:10px;color:#666">${e.from}–${e.to}</span></div><ul style="margin:3px 0 0;padding-left:16px">${e.bullets.map(b=>`<li style="font-size:11px;margin-bottom:1px">${b}</li>`).join('')}</ul></div>`).join('')}</div>`:''} ${rState.sections.skills&&rState.skills.length?`<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #ccc;padding-bottom:3px;margin-bottom:6px">Skills</div><div style="font-size:11px">${rState.skills.join(' · ')}</div></div>`:''} ${rState.sections.education&&rState.education.length?`<div><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #ccc;padding-bottom:3px;margin-bottom:6px">Education</div>${rState.education.map(e=>`<div style="font-size:11px"><span style="font-weight:700">${e.school}</span> — ${e.degree} · ${e.year}</div>`).join('')}</div>`:''}</div>`;}
 function rElegant(){return `<div style="${rs}background:#faf8f5;min-height:1120px"><div style="background:${rState.accent};padding:36px 44px;color:#fff"><div style="font-family:${rState.font},serif;font-size:30px;font-weight:700">${rState.name}</div><div style="font-size:13px;opacity:0.85;margin-top:3px">${rState.title}</div><div style="display:flex;gap:18px;margin-top:10px;flex-wrap:wrap">${[rState.email,rState.phone,rState.location].map(v=>`<span style="font-size:11px;opacity:0.75">${v}</span>`).join('')}</div></div><div style="padding:28px 44px"><div style="font-size:12px;color:#444;line-height:1.7;margin-bottom:20px;font-style:italic">"${rState.summary}"</div>${rState.sections.experience&&rState.experiences.length?`<div style="margin-bottom:18px"><div style="font-family:${rState.font},serif;font-size:15px;color:${rState.accent};margin-bottom:10px;font-weight:700">Experience</div>${rState.experiences.map(e=>`<div style="margin-bottom:12px;padding-left:14px;border-left:3px solid ${rState.accent}25"><div style="font-weight:700;font-size:12px">${e.role} · <span style="color:${rState.accent}">${e.company}</span></div><div style="font-size:10px;color:#999;margin-bottom:4px">${e.from}–${e.to}</div>${e.bullets.map(b=>`<div style="font-size:11px;color:#555;margin-bottom:2px">• ${b}</div>`).join('')}</div>`).join('')}</div>`:''}</div></div>`;}
 function rGlass(){return `<div style="${rs}background:linear-gradient(135deg,#1e1b4b,#312e81,#1e1b4b);min-height:1120px;padding:32px 36px;color:#e0e0ff"><div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:14px;padding:24px;margin-bottom:18px"><div style="font-family:${rState.font},serif;font-size:26px;font-weight:700;color:#fff">${rState.name}</div><div style="font-size:12px;color:${rState.accent};margin:3px 0 8px">${rState.title}</div><div style="display:flex;gap:12px;flex-wrap:wrap">${[rState.email,rState.phone,rState.location].map(v=>`<span style="font-size:10px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:20px;border:1px solid rgba(255,255,255,0.1)">${v}</span>`).join('')}</div></div><div style="font-size:11px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:18px">${rState.summary}</div>${rState.sections.experience&&rState.experiences.length?`<div style="margin-bottom:18px"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:${rState.accent};margin-bottom:10px">Experience</div>${rState.experiences.map(e=>`<div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;margin-bottom:7px"><div style="font-weight:700;font-size:12px;color:#fff">${e.role} · ${e.company}</div><div style="font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:5px">${e.from}–${e.to}</div>${e.bullets.map(b=>`<div style="font-size:11px;color:rgba(255,255,255,0.6);margin-bottom:2px">• ${b}</div>`).join('')}</div>`).join('')}</div>`:''} ${rState.sections.skills&&rState.skills.length?`<div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:${rState.accent};margin-bottom:7px">Skills</div><div style="display:flex;flex-wrap:wrap;gap:5px">${rState.skills.map(s=>`<span style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:3px 9px;font-size:10px;color:rgba(255,255,255,0.7)">${s}</span>`).join('')}</div></div>`:''}</div>`;}
 function rCreative(){return `<div style="${rs}background:#fffbf7;min-height:1120px"><div style="display:flex"><div style="width:8px;background:${rState.accent}"></div><div style="flex:1;padding:32px 36px"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px"><div><div style="font-family:${rState.font},serif;font-size:30px;font-weight:700;color:#1a1a2e;letter-spacing:-0.5px">${rState.name}</div><div style="font-size:13px;color:${rState.accent};font-weight:600;margin-top:3px">${rState.title}</div></div>${rState.showPhoto&&rState.photoUrl?`<img src="${rState.photoUrl}" style="width:68px;height:68px;border-radius:10px;object-fit:cover;border:3px solid ${rState.accent}">`:''}</div><div style="display:flex;gap:12px;flex-wrap:wrap;font-size:10px;color:#888;margin-bottom:18px">${[rState.email,rState.phone,rState.location].map(v=>`<span style="background:#f3f0ea;padding:2px 8px;border-radius:20px">${v}</span>`).join('')}</div><div style="font-size:12px;color:#555;line-height:1.7;margin-bottom:20px">${rState.summary}</div>${rState.sections.experience&&rState.experiences.length?`<div style="margin-bottom:18px"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:${rState.accent};margin-bottom:10px">Experience</div>${rState.experiences.map(e=>`<div style="margin-bottom:12px;display:flex;gap:12px"><div style="width:6px;height:6px;background:${rState.accent};border-radius:50%;margin-top:5px;flex-shrink:0"></div><div style="flex:1"><div style="font-weight:700;font-size:12px">${e.role}</div><div style="font-size:11px;color:${rState.accent};margin-bottom:3px">${e.company} · ${e.from}–${e.to}</div>${e.bullets.map(b=>`<div style="font-size:11px;color:#555;margin-bottom:2px">→ ${b}</div>`).join('')}</div></div>`).join('')}</div>`:''}</div></div></div>`;}
@@ -742,173 +740,5 @@ function renderDashboard(){
 renderSidebar();
 renderResume();
 
-// ═══════════════════════════════════════════
-//  SERVER CONNECTION & ATS AI
-// ═══════════════════════════════════════════
-let isServerOnline = false;
-let serverUrl = window.location.hostname.includes('vercel.app') 
-  ? window.location.origin 
-  : 'http://localhost:5000';
 
-async function checkServerStatus() {
-  const badge = document.getElementById('server-status-badge');
-  if (!badge) return;
-  
-  const tryFetch = async (url) => {
-    try {
-      const res = await fetch(url + '/api/health', { method: 'GET' });
-      return res.ok;
-    } catch (e) { return false; }
-  };
-
-  // Try localhost then 127.0.0.1
-  let ok = await tryFetch('http://localhost:5000');
-  if (ok) { serverUrl = 'http://localhost:5000'; }
-  else {
-    ok = await tryFetch('http://127.0.0.1:5000');
-    if (ok) serverUrl = 'http://127.0.0.1:5000';
-  }
-
-  if (ok) {
-    isServerOnline = true;
-    badge.className = 'server-status-badge online';
-    badge.querySelector('.status-text').textContent = 'Server: Connected (Real AI Active)';
-  } else {
-    isServerOnline = false;
-    badge.className = 'server-status-badge offline';
-    badge.querySelector('.status-text').textContent = 'Server: Offline (Click to fix)';
-  }
-}
-
-// Initial status check
-setInterval(checkServerStatus, 5000);
-setTimeout(checkServerStatus, 1000);
-
-function showServerSetup() {
-  if (isServerOnline) {
-    alert('✅ **Your AI Server is actually Online!** You can start scanning resumes with Real AI right now.');
-    return;
-  }
-  
-  const cmd = `cd server; npm install; node index.js`;
-  const msg = `🚀 **To activate Real AI, please start your backend server:**\n\n` +
-              `1. Open your terminal (Ctrl + \`) \n` +
-              `2. Run this command: \n   ${cmd}\n\n` +
-              `This scanner will automatically detect the server once it's on!`;
-  
-  alert(msg);
-  console.log('Copy this command:', cmd);
-}
-
-// ═══════════════════════════════════════════
-//  RESUME ATS LOGIC
-// ═══════════════════════════════════════════
-let atsFile = null;
-
-function handleAtsFileUpload(input) {
-  const file = input.files[0];
-  if (!file) return;
-  if (file.type !== 'application/pdf') { alert('Please upload a PDF file.'); return; }
-  atsFile = file;
-  document.getElementById('ats-filename').textContent = file.name;
-  document.getElementById('ats-dropzone').style.borderColor = 'var(--green)';
-}
-
-async function analyzeResumeATS() {
-  if (!atsFile) { alert('Please upload a resume first.'); return; }
-
-  const btn = document.getElementById('ats-analyze-btn');
-  const loader = document.getElementById('ats-loader');
-  const jd = document.getElementById('ats-jd-input').value.trim();
-  const userApiKey = localStorage.getItem('rf_api_key');
-
-  btn.disabled = true;
-  loader.style.display = 'block';
-  document.getElementById('ats-results').style.display = 'none';
-
-  try {
-    if (isServerOnline) {
-      // 1. EXTRACT
-      const formData = new FormData();
-      formData.append('resume', atsFile);
-      const exRes = await fetch(serverUrl + '/api/ats/extract', { method: 'POST', body: formData });
-      if (!exRes.ok) throw new Error('Could not extract text.');
-      const { text } = await exRes.json();
-
-      // 2. ANALYZE
-      const anRes = await fetch(serverUrl + '/api/ats/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, jobDescription: jd, apiKey: userApiKey })
-      });
-      
-      const result = await anRes.json();
-      if (!anRes.ok) throw new Error(result.error || 'AI Analysis failed.');
-      
-      displayAtsResults({
-        ...result,
-        overallFeedback: result.overallFeedback || "Analysis complete."
-      });
-
-    } else {
-      // FALLBACK TO OFFLINE MODE
-      await new Promise(r => setTimeout(r, 1200));
-      displayAtsResults({
-        score: 82,
-        matchedKeywords: ["JavaScript", "React", "Frontend Development", "UI/UX", "Responsive Design"],
-        missingKeywords: ["TypeScript", "Next.js", "Redux", "Jest"],
-        strengths: ["Excellent use of action verbs", "Clear contact information", "Modern skills stack"],
-        improvementTips: ["Add more quantifiable results (e.g., 'Improved performance by 30%')", "Include your GitHub profile link", "Add the missing keywords listed below to rank higher"],
-        overallFeedback: "Your resume demonstrates strong fundamentals with a modern skill set. To further improve your score, include quantifiable achievements, relevant keywords, and a GitHub profile link to enhance ATS performance."
-      });
-    }
-  } catch (err) {
-    console.error('ATS Error:', err);
-    alert('❌ Analysis Failed: ' + err.message);
-  } finally {
-    btn.disabled = false;
-    loader.style.display = 'none';
-  }
-}
-
-function displayAtsResults(data) {
-  const results = document.getElementById('ats-results');
-  results.style.display = 'block';
-  results.scrollIntoView({ behavior: 'smooth' });
-
-  // Update Score
-  const scoreVal = document.getElementById('ats-score-val');
-  const scoreCircle = document.getElementById('ats-score-circle');
-  const feedbackText = document.getElementById('ats-feedback-text');
-  
-  scoreVal.textContent = data.score + '%';
-  scoreCircle.style.strokeDasharray = `${data.score} 100`;
-  
-  // Update feedback color based on score
-  if (data.score >= 80) scoreCircle.style.stroke = 'var(--green)';
-  else if (data.score >= 60) scoreCircle.style.stroke = 'var(--amber)';
-  else scoreCircle.style.stroke = 'var(--rose)';
-  
-  feedbackText.textContent = data.overallFeedback;
-
-  // Update Lists
-  renderAtsList('ats-strengths', data.strengths);
-  renderAtsList('ats-tips', data.improvementTips);
-  
-  // Update Tags
-  renderAtsTags('ats-matched-keywords', data.matchedKeywords);
-  renderAtsTags('ats-missing-keywords', data.missingKeywords);
-}
-
-function renderAtsList(id, items) {
-  const el = document.getElementById(id);
-  el.innerHTML = items.map(item => `<li>${item}</li>`).join('');
-}
-
-function renderAtsTags(id, items) {
-  const el = document.getElementById(id);
-  el.innerHTML = items && items.length 
-    ? items.map(item => `<span>${item}</span>`).join('')
-    : '<div style="font-size:11px;color:var(--text3)">None identified</div>';
-}
 

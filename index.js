@@ -112,61 +112,6 @@ app.get('/api/resume/load', auth, async (req, res) => {
   } catch (e) { res.status(500).json({ error: 'Database unavailable' }); }
 });
 
-// 🚀 ATS: EXTRACT TEXT FROM PDF
-app.post('/api/ats/extract', upload.single('resume'), async (req, res) => {
-  if (!req.file) return res.status(400).json({ error: 'No file' });
-  try {
-    const data = await pdfParse(req.file.buffer);
-    res.json({ text: data.text });
-  } catch (e) { res.status(500).json({ error: 'Text extraction failed' }); }
-});
-
-// 🧠 AI ENGINE (Supports both Groq and Gemini)
-app.post('/api/ats/analyze', async (req, res) => {
-  const { text, jobDescription, apiKey } = req.body;
-  
-  // Find a valid key (ignore placeholders)
-  const isVal = (k) => k && !k.includes('your') && !k.includes('placeholder');
-  let activeKey = isVal(apiKey) ? apiKey : (isVal(process.env.GROQ_API_KEY) ? process.env.GROQ_API_KEY : (isVal(process.env.GEMINI_API_KEY) ? process.env.GEMINI_API_KEY : null));
-
-  if (!activeKey) {
-    return res.status(400).json({ error: 'NO_API_KEY', msg: 'Please provide a Groq or Gemini API key in settings.' });
-  }
-
-  try {
-    // 1. Groq Path
-    if (activeKey.startsWith('gsk_')) {
-      const groq = new Groq({ apiKey: activeKey });
-      const completion = await groq.chat.completions.create({
-        messages: [{ role: "user", content: `You are an expert ATS (Applicant Tracking System) analyzer. Analyze this resume text and compare it with the job description. Return JSON with the following keys: score (0-100), matchedKeywords (array), missingKeywords (array), strengths (array), improvementTips (array), overallFeedback (string). \n\nResume Text: ${text} \n\nJob Description: ${jobDescription || "N/A"}` }],
-        model: "llama3-8b-8192",
-        response_format: { type: "json_object" }
-      });
-      return res.json(JSON.parse(completion.choices[0].message.content));
-    }
-
-    // 2. Gemini Path
-    const currentGenAI = (activeKey === process.env.GEMINI_API_KEY) ? genAI : new GoogleGenerativeAI(activeKey);
-    const model = currentGenAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
-      generationConfig: { response_mime_type: "application/json" }
-    });
-    
-    const prompt = `Analyze this resume text against the job description for ATS optimization. 
-    Resume: ${text} 
-    JD: ${jobDescription || "N/A"}
-    
-    Return a strictly valid JSON object: {score, matchedKeywords, missingKeywords, strengths, improvementTips, overallFeedback}.`;
-
-    const result = await model.generateContent(prompt);
-    const analysis = JSON.parse(result.response.text());
-    res.json(analysis);
-
-  } catch (error) {
-    console.error('AI Error:', error);
-    res.status(500).json({ error: 'Analysis failed', details: error.message });
-  }
-});
 
 // 🤖 AI CHAT (Conversational Assistant)
 app.post('/api/ai/chat', async (req, res) => {
